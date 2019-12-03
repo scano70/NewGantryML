@@ -1,1 +1,3 @@
 # NewGantryML
+
+`pip install numpy`

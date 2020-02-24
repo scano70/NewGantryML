@@ -22,13 +22,13 @@ def first_nonzero(my_list):
                 return ind
     return 0
 
-for i in np.arange(0,500):
-    img = cv2.imread('line_imgs/lines_{0}.png'.format(i),0)
+def find_edge(img):
+
     edges = cv2.Canny(img,100,100)
 
     if edges is None :
         print 'canny failed'
-        continue
+        return None
 
     top = edges[0,:]/255.
     bot = edges[-1,:]/255.
@@ -52,8 +52,6 @@ for i in np.arange(0,500):
                 'r':right,
                 'l':left}
 
-    #print sums_dict
-
     if 0 in sums :
         sums.pop(sums.index(0))
         if 0 in sums :
@@ -68,12 +66,12 @@ for i in np.arange(0,500):
     x1_side = get_key(sums_dict,sums[0])
     if x1_side == None :
         print 'failed to find x1_side'
-        continue
+        return None
     x1_ind = first_nonzero(ind_dict[x1_side])
     x2_side = get_key(sums_dict,sums[1])
     if x1_side == None :
         print 'failed to find x1_side'
-        continue
+        return None
     x2_ind = first_nonzero(ind_dict[x2_side])
 
     x1=[0]*2
@@ -105,26 +103,44 @@ for i in np.arange(0,500):
         x2=[x2_ind,250]
         #print 'x2 ({0},250)'.format(x2_ind)
 
+    return x1,x2
 
-    xs=zip(*[x1,x2])[0]
-    ys=zip(*[x1,x2])[1]
+def main():
+    for i in np.arange(0,500):
+        img = cv2.imread('line_imgs/lines_{0}.png'.format(i),0)
 
-    plt.subplot(231)
-    plt.imshow(img,cmap = 'gray')
-    plt.xlim(0,250)
-    plt.ylim(250,0)
-    plt.plot(xs,ys,color='m')
-    # plt.subplot(232)
-    # plt.imshow(edges,cmap = 'gray')
-    # plt.xlim(0,250)
-    # plt.ylim(250,0)
-    # plt.plot(xs,ys,color='m')
-    # plt.subplot(233),plt.plot(ind,top)
-    # plt.subplot(234),plt.plot(ind,bot)
-    # plt.subplot(235),plt.plot(ind,left)
-    # plt.subplot(236),plt.plot(ind,right)
-    plt.savefig('predictions/lines_{0}.png'.format(i))
-    plt.clf()
-    #plt.show()
+        catch = find_edge(img)
+        if catch is None : 
+            continue
+        else :  
+            x1,x2 = find_edge(img)
+    
+        xs=zip(*[x1,x2])[0]
+        ys=zip(*[x1,x2])[1]
 
-    #if raw_input('continue')=='n' : break
+        plt.subplot(231)
+        plt.imshow(img,cmap = 'gray')
+        plt.xlim(0,250)
+        plt.ylim(250,0)
+        plt.plot(xs,ys,color='m')
+        
+        #### debug stuff
+#         plt.subplot(232)
+#         plt.imshow(edges,cmap = 'gray')
+#         plt.xlim(0,250)
+#         plt.ylim(250,0)
+#         plt.plot(xs,ys,color='m')
+#         plt.subplot(233),plt.plot(ind,top)
+#         plt.subplot(234),plt.plot(ind,bot)
+#         plt.subplot(235),plt.plot(ind,left)
+#         plt.subplot(236),plt.plot(ind,right)
+        
+        plt.savefig('predictions/lines_{0}.png'.format(i))
+        plt.clf()
+        #plt.show()
+        
+        #if raw_input('continue')=='n' : break
+
+if __name__== "__main__":
+    main()
+  

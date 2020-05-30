@@ -1,6 +1,6 @@
 # NewGantryML
 
-The big Gantry has a microscopic camera fitted into it that can move around the table and take pictures. The goal with this project is to train an algorithm to recognize modules placed on the table so it can align itself on top and be able to pick it up without human intervention.
+The gantry machine has a microscopic camera fitted into it that can move around the table and take pictures. The goal with this project is to train an algorithm to recognize modules placed on the table so it can align itself on top and be able to pick it up without human intervention.
 
 ## Installation
 
